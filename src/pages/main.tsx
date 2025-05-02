@@ -12,7 +12,7 @@ export function Main() {
 
   return (
     <div className="grid items-center justify-center">
-      <div className="justify-center bg-white max-w-[800px] ">
+      <div className="justify-center bg-white  min-h-screen">
         <header className="bg-[#7695EC] p-8">
           {" "}
           <h1 className="text-white">CodeLeap Network</h1>
@@ -24,13 +24,21 @@ export function Main() {
             </h1>
             {username && <CreatePostForm user={username} />}
           </div>
-          {posts.map((post) => (
-            <Card
-              key={post.id}
-              post={post}
-              hasPermission={post.username === username}
-            />
-          ))}
+          {posts.length > 0 ? (
+            <div className="grid gap-8 max-w-[800px]">
+              {posts.map((post) => (
+                <Card
+                  key={post.id}
+                  post={post}
+                  hasPermission={post.username === username}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex min-w-[800px]">
+              <span>No posts found</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

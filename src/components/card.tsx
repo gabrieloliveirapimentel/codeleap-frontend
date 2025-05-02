@@ -1,4 +1,6 @@
 import { PiTrashBold, PiNotePencilBold } from "react-icons/pi";
+import { Modal } from "./modal";
+import { useState } from "react";
 
 interface CardProps {
   post: {
@@ -10,48 +12,63 @@ interface CardProps {
     author_ip: string;
   };
   hasPermission: boolean;
-  openEditModal?: (prev: boolean) => void;
-  openDeleteModal?: (prev: boolean) => void;
 }
 
-export function Card({
-  post,
-  hasPermission,
-  openEditModal,
-  openDeleteModal,
-}: CardProps) {
+export function Card({ post, hasPermission }: CardProps) {
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
   return (
-    <div className="rounded-2xl border-[1px] border-[#999999]">
-      <div className="flex flex-row items-center px-8 py-6 bg-[#7695EC] rounded-tl-xl rounded-tr-xl justify-between">
-        <h1 className="text-white">{post.title}</h1>
-        {hasPermission && (
-          <div className="flex flex-row gap-4">
-            <PiTrashBold
-              size={26}
-              color="white"
-              onClick={() => openDeleteModal && openDeleteModal(true)}
-              className="hover:cursor-pointer"
-            />
-            <PiNotePencilBold
-              size={26}
-              color="white"
-              onClick={() => openEditModal && openEditModal(true)}
-              className="hover:cursor-pointer"
-            />
-          </div>
-        )}
-      </div>
-      <div className="px-8 py-6 grid">
-        <div className="flex justify-between py-3">
-          <span className="font-bold text-[18px] text-[#777777]">
-            {post.username}
-          </span>
-          <span className="text-[18px] text-[#777777]">
-            {post.created_datetime}
-          </span>
+    <>
+      <div className="rounded-2xl border-[1px] border-[#999999]">
+        <div className="flex flex-row items-center px-8 py-6 bg-[#7695EC] rounded-tl-xl rounded-tr-xl justify-between">
+          <h1 className="text-white">{post.title}</h1>
+          {hasPermission && (
+            <div className="flex flex-row gap-4">
+              <PiTrashBold
+                size={26}
+                color="white"
+                onClick={() => setOpenDeleteModal(true)}
+                className="hover:cursor-pointer"
+              />
+              <PiNotePencilBold
+                size={26}
+                color="white"
+                onClick={() => setOpenEditModal(true)}
+                className="hover:cursor-pointer"
+              />
+            </div>
+          )}
         </div>
-        <p className="text-[18px] mt-2">{post.content}</p>
+        <div className="px-8 py-6 grid">
+          <div className="flex justify-between py-3">
+            <span className="font-bold text-[18px] text-[#777777]">
+              {post.username}
+            </span>
+            <span className="text-[18px] text-[#777777]">
+              {post.created_datetime}
+            </span>
+          </div>
+          <p className="text-[18px] mt-2">{post.content}</p>
+        </div>
       </div>
-    </div>
+      {openEditModal && (
+        <Modal
+          title="Edit item"
+          id={post.id}
+          post={post}
+          onDelete={false}
+          close={() => setOpenEditModal(false)}
+        />
+      )}
+      {openDeleteModal && (
+        <Modal
+          title="Are you sure you want to delete this item?"
+          id={post.id}
+          onDelete={true}
+          close={() => setOpenDeleteModal(false)}
+        />
+      )}
+    </>
   );
 }

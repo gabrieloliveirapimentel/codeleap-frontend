@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Card } from "../components/card";
-import { Modal } from "../components/modal";
 import { PostForm } from "../components/form/post-form";
 
 import { getAllPosts } from "../api/fetch";
@@ -15,12 +14,14 @@ export interface Post {
   author_ip: string;
 }
 
+export interface PostFormData {
+  title: string;
+  content: string;
+}
+
 export function Main() {
   const location = useLocation();
   const username = location.state.username;
-
-  const [openEditModal, setOpenEditModal] = useState(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
 
   //const date = new Date();
@@ -53,24 +54,8 @@ export function Main() {
               key={post.id}
               post={post}
               hasPermission={post.username === username}
-              openEditModal={() => setOpenEditModal(true)}
-              openDeleteModal={() => setOpenDeleteModal(true)}
             />
           ))}
-          {openEditModal && (
-            <Modal
-              title="Edit item"
-              editModal={true}
-              close={() => setOpenEditModal(false)}
-            />
-          )}
-          {openDeleteModal && (
-            <Modal
-              title="Are you sure you want to delete this item?"
-              editModal={false}
-              close={() => setOpenDeleteModal(false)}
-            />
-          )}
         </div>
       </div>
     </div>

@@ -1,13 +1,29 @@
 import { PiXBold } from "react-icons/pi";
 import { PostForm } from "./form/post-form";
+import { Post } from "../pages/main";
+import { deletePost } from "../api/fetch";
 
 interface ModalProps {
+  post?: Post;
+  id?: number;
   title: string;
-  editModal: boolean;
+  onDelete: boolean;
   close: (prev: boolean) => void;
 }
 
-export function Modal({ title, editModal, close }: ModalProps) {
+export function Modal({ post, id, title, onDelete, close }: ModalProps) {
+  const values = {
+    title: post?.title || "",
+    content: post?.content || "",
+  };
+
+  async function handleDelete() {
+    if (onDelete && id) {
+      await deletePost(id);
+      close(false);
+    }
+  }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center ">
       <div className="absolute inset-0 bg-[#DDDDDD] opacity-80"></div>
@@ -23,9 +39,7 @@ export function Modal({ title, editModal, close }: ModalProps) {
             <PiXBold size={16} />
           </button>
         </div>
-        {editModal ? (
-          <PostForm mode="edit" onClose={close} />
-        ) : (
+        {onDelete ? (
           <div className="flex justify-end gap-3">
             <button
               onClick={(prev) => {
@@ -38,11 +52,18 @@ export function Modal({ title, editModal, close }: ModalProps) {
 
             <button
               className="mt-2 text-white cursor-pointer  bg-red-400 hover:bg-red-600"
-              type="submit"
+              onClick={handleDelete}
             >
               Delete
             </button>
           </div>
+        ) : (
+          <PostForm
+            mode="edit"
+            onClose={close}
+            id={id}
+            initialValues={values}
+          />
         )}
       </div>
     </div>

@@ -1,6 +1,8 @@
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { editPost } from "../../api/fetch";
+import { useEffect } from "react";
 
 const schema = yup.object({
   title: yup.string().required("Title is required"),
@@ -10,11 +12,18 @@ const schema = yup.object({
 export type FormData = yup.InferType<typeof schema>;
 
 interface CreatePostProps {
+  id?: number;
   mode: "edit" | "create";
+  initialValues?: FormData;
   onClose?: (state: boolean) => void;
 }
 
-export function PostForm({ mode, onClose }: CreatePostProps) {
+export function PostForm({
+  id,
+  initialValues,
+  mode,
+  onClose,
+}: CreatePostProps) {
   const {
     register,
     reset,
@@ -28,13 +37,20 @@ export function PostForm({ mode, onClose }: CreatePostProps) {
   async function onSubmit(data: FormData) {
     if (mode === "create") {
       console.log("Irei chamar a API para post");
-    } else if (mode === "edit") {
-      console.log("Irei chamar a API para put");
+    } else if (mode === "edit" && id) {
+      await editPost(id, {
+        title: data.title,
+        content: data.content,
+      });
     }
 
     console.log(data);
     reset();
   }
+
+  useEffect(() => {
+    if (mode === "edit" && initialValues) reset(initialValues);
+  }, [initialValues, mode, reset]);
 
   return (
     <form

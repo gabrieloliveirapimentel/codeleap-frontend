@@ -5,3 +5,15 @@ export async function getAllPosts() {
 
     return data;
 }
+
+export async function editPost(id: number, body: object) {
+    const data = await api.patch(`/careers/${id}/`, body)
+
+    return data;
+}
+
+export async function deletePost(id: number) {
+    const data = await api.delete(`/careers/${id}/`)
+
+    return data;
+}

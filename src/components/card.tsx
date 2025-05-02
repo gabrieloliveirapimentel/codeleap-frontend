@@ -1,0 +1,57 @@
+import { PiTrashBold, PiNotePencilBold } from "react-icons/pi";
+
+interface CardProps {
+  post: {
+    id: number;
+    username: string;
+    title: string;
+    content: string;
+    created_datetime: string;
+    author_ip: string;
+  };
+  hasPermission: boolean;
+  openEditModal?: (prev: boolean) => void;
+  openDeleteModal?: (prev: boolean) => void;
+}
+
+export function Card({
+  post,
+  hasPermission,
+  openEditModal,
+  openDeleteModal,
+}: CardProps) {
+  return (
+    <div className="rounded-2xl border-[1px] border-[#999999]">
+      <div className="flex flex-row items-center px-8 py-6 bg-[#7695EC] rounded-tl-xl rounded-tr-xl justify-between">
+        <h1 className="text-white">{post.title}</h1>
+        {hasPermission && (
+          <div className="flex flex-row gap-4">
+            <PiTrashBold
+              size={26}
+              color="white"
+              onClick={() => openDeleteModal && openDeleteModal(true)}
+              className="hover:cursor-pointer"
+            />
+            <PiNotePencilBold
+              size={26}
+              color="white"
+              onClick={() => openEditModal && openEditModal(true)}
+              className="hover:cursor-pointer"
+            />
+          </div>
+        )}
+      </div>
+      <div className="px-8 py-6 grid">
+        <div className="flex justify-between py-3">
+          <span className="font-bold text-[18px] text-[#777777]">
+            {post.username}
+          </span>
+          <span className="text-[18px] text-[#777777]">
+            {post.created_datetime}
+          </span>
+        </div>
+        <p className="text-[18px] mt-2">{post.content}</p>
+      </div>
+    </div>
+  );
+}

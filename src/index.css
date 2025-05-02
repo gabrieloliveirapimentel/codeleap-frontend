@@ -24,7 +24,6 @@ h1 {
   font-size: 22px;
   font-weight: 700;
   line-height: 1.2;
-  color: #000000;
 }
 
 label {
@@ -34,7 +33,7 @@ label {
   color: #000000;
 }
 
-input {
+input, textarea {
   border-radius: 8px;
   padding: 8px;
   font-size: 14px;

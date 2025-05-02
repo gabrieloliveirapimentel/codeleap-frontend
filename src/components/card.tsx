@@ -1,17 +1,11 @@
-import { PiTrashBold, PiNotePencilBold } from "react-icons/pi";
 import { Modal } from "./modal";
 import { useState } from "react";
 import { dateToNow } from "../lib/utils";
+import { Post } from "../contexts/types";
+import { PiTrashBold, PiNotePencilBold } from "react-icons/pi";
 
 interface CardProps {
-  post: {
-    id: number;
-    username: string;
-    title: string;
-    content: string;
-    created_datetime: string;
-    author_ip: string;
-  };
+  post: Post;
   hasPermission: boolean;
 }
 
@@ -59,7 +53,7 @@ export function Card({ post, hasPermission }: CardProps) {
           id={post.id}
           post={post}
           onDelete={false}
-          close={() => setOpenEditModal(false)}
+          onClose={() => setOpenEditModal(false)}
         />
       )}
       {openDeleteModal && (
@@ -67,7 +61,7 @@ export function Card({ post, hasPermission }: CardProps) {
           title="Are you sure you want to delete this item?"
           id={post.id}
           onDelete={true}
-          close={() => setOpenDeleteModal(false)}
+          onClose={() => setOpenDeleteModal(false)}
         />
       )}
     </>

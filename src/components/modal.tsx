@@ -1,26 +1,28 @@
+import { Post, PostsContext } from "../contexts/types";
 import { PiXBold } from "react-icons/pi";
-import { PostForm } from "./form/post-form";
-import { Post } from "../pages/main";
-import { deletePost } from "../api/fetch";
+import { EditPostForm } from "./form/form-edit-post";
+import { DeletePostForm } from "./form/form-delete.post";
+import { useContext } from "react";
 
 interface ModalProps {
   post?: Post;
-  id?: number;
+  id: number;
   title: string;
   onDelete: boolean;
-  close: (prev: boolean) => void;
+  onClose: (prev: boolean) => void;
 }
 
-export function Modal({ post, id, title, onDelete, close }: ModalProps) {
-  const values = {
+export function Modal({ post, id, title, onDelete, onClose }: ModalProps) {
+  const { deletePost } = useContext(PostsContext);
+  const initialValues = {
     title: post?.title || "",
     content: post?.content || "",
   };
 
   async function handleDelete() {
-    if (onDelete && id) {
-      await deletePost(id);
-      close(false);
+    if (onDelete) {
+      deletePost(id);
+      onClose(false);
     }
   }
 
@@ -33,36 +35,19 @@ export function Modal({ post, id, title, onDelete, close }: ModalProps) {
           <button
             className=" hover:text-[#7695EC] cursor-pointer"
             onClick={(prev) => {
-              close(!prev);
+              onClose(!prev);
             }}
           >
             <PiXBold size={16} />
           </button>
         </div>
         {onDelete ? (
-          <div className="flex justify-end gap-3">
-            <button
-              onClick={(prev) => {
-                close(!prev);
-              }}
-              className="mt-2 text-black cursor-pointer border-[1px] border-black"
-            >
-              Cancel
-            </button>
-
-            <button
-              className="mt-2 text-white cursor-pointer  bg-red-400 hover:bg-red-600"
-              onClick={handleDelete}
-            >
-              Delete
-            </button>
-          </div>
+          <DeletePostForm onClose={onClose} onDelete={handleDelete} />
         ) : (
-          <PostForm
-            mode="edit"
-            onClose={close}
+          <EditPostForm
             id={id}
-            initialValues={values}
+            onClose={onClose}
+            initialValues={initialValues}
           />
         )}
       </div>

@@ -1,15 +1,76 @@
-import { CreatePostForm } from "../components/form/create-post-form";
+import { useEffect, useState } from "react";
+import { Card } from "../components/card";
+import { Modal } from "../components/modal";
+import { PostForm } from "../components/form/post-form";
+
+import { getAllPosts } from "../api/fetch";
+import { useLocation } from "react-router";
+
+export interface Post {
+  id: number;
+  username: string;
+  title: string;
+  content: string;
+  created_datetime: string;
+  author_ip: string;
+}
 
 export function Main() {
+  const location = useLocation();
+  const username = location.state.username;
+
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  //const date = new Date();
+  //console.log(date.toISOString());
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const response = await getAllPosts();
+      setPosts(response.data.results);
+    }
+    fetchPosts();
+  }, []);
+
   return (
     <div className="grid items-center justify-center">
-      <div className="justify-center h-screen bg-white min-w-[800px] ">
+      <div className="justify-center bg-white max-w-[800px] ">
         <header className="bg-[#7695EC] p-8">
           {" "}
           <h1 className="text-white">CodeLeap Network</h1>
         </header>
         <div className="grid p-8 gap-8">
-          <CreatePostForm />
+          <div className="p-8 rounded-2xl border-[1px] border-[#999999]">
+            <h1 className="text-black font-bold text-xl">
+              What's on your mind?
+            </h1>
+            <PostForm mode="create" />
+          </div>
+          {posts.map((post) => (
+            <Card
+              key={post.id}
+              post={post}
+              hasPermission={post.username === username}
+              openEditModal={() => setOpenEditModal(true)}
+              openDeleteModal={() => setOpenDeleteModal(true)}
+            />
+          ))}
+          {openEditModal && (
+            <Modal
+              title="Edit item"
+              editModal={true}
+              close={() => setOpenEditModal(false)}
+            />
+          )}
+          {openDeleteModal && (
+            <Modal
+              title="Are you sure you want to delete this item?"
+              editModal={false}
+              close={() => setOpenDeleteModal(false)}
+            />
+          )}
         </div>
       </div>
     </div>

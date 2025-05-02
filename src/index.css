@@ -29,7 +29,7 @@ h1 {
 label {
   font-size: 16px;
   font-weight: 400;
-  line-height: 1;
+  line-height: 1.2;
   color: #000000;
 }
 
@@ -37,6 +37,7 @@ input, textarea {
   border-radius: 8px;
   padding: 8px;
   font-size: 14px;
+  line-height: 1.2;
   
   &::placeholder {
     color: #CCCCCC;
@@ -53,5 +54,5 @@ button {
   
   font-size: 16px;
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.2;
 }

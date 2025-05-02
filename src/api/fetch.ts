@@ -6,6 +6,12 @@ export async function getAllPosts() {
     return data;
 }
 
+export async function createPost(body: object) {
+    const data = await api.post('/careers/', body)
+
+    return data;
+}
+
 export async function editPost(id: number, body: object) {
     const data = await api.patch(`/careers/${id}/`, body)
 

@@ -1,6 +1,7 @@
 import { PiTrashBold, PiNotePencilBold } from "react-icons/pi";
 import { Modal } from "./modal";
 import { useState } from "react";
+import { dateToNow } from "../lib/utils";
 
 interface CardProps {
   post: {
@@ -46,7 +47,7 @@ export function Card({ post, hasPermission }: CardProps) {
               {post.username}
             </span>
             <span className="text-[18px] text-[#777777]">
-              {post.created_datetime}
+              {dateToNow(post.created_datetime)}
             </span>
           </div>
           <p className="text-[18px] mt-2">{post.content}</p>

@@ -47,7 +47,7 @@ export function Main() {
             <h1 className="text-black font-bold text-xl">
               What's on your mind?
             </h1>
-            <PostForm mode="create" />
+            <PostForm mode="create" user={username} />
           </div>
           {posts.map((post) => (
             <Card

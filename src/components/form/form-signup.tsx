@@ -27,7 +27,6 @@ export function SignUpForm() {
   const navigate = useNavigate();
 
   async function onSubmit(data: FormData) {
-    console.log(data);
     navigate("/main", {
       state: {
         username: data.username,

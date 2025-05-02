@@ -1,8 +1,8 @@
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createPost, editPost } from "../../api/fetch";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { PostsContext } from "../../contexts/types";
 
 const schema = yup.object({
   title: yup.string().required("Title is required"),
@@ -11,21 +11,15 @@ const schema = yup.object({
 
 export type FormData = yup.InferType<typeof schema>;
 
-interface CreatePostProps {
-  id?: number;
-  user?: string;
-  mode: "edit" | "create";
-  initialValues?: FormData;
-  onClose?: (state: boolean) => void;
+interface EditPostProps {
+  id: number;
+  initialValues: FormData;
+  onClose: (state: boolean) => void;
 }
 
-export function PostForm({
-  id,
-  user,
-  initialValues,
-  mode,
-  onClose,
-}: CreatePostProps) {
+export function EditPostForm({ id, initialValues, onClose }: EditPostProps) {
+  const { updatePost } = useContext(PostsContext);
+
   const {
     register,
     reset,
@@ -37,26 +31,15 @@ export function PostForm({
   });
 
   async function onSubmit(data: FormData) {
-    if (mode === "create") {
-      await createPost({
-        username: user,
-        title: data.title,
-        content: data.content,
-      });
-    } else if (mode === "edit" && id) {
-      await editPost(id, {
-        title: data.title,
-        content: data.content,
-      });
-    }
-
-    console.log(data);
+    updatePost(id, data);
     reset();
+
+    onClose(false);
   }
 
   useEffect(() => {
-    if (mode === "edit" && initialValues) reset(initialValues);
-  }, [initialValues, mode, reset]);
+    reset(initialValues);
+  }, [initialValues, reset]);
 
   return (
     <form
@@ -99,29 +82,18 @@ export function PostForm({
         )}
       </div>
       <div className="flex justify-end gap-3">
-        {mode === "edit" && onClose && (
-          <button
-            onClick={() => onClose(false)}
-            className="mt-2 text-black cursor-pointer border-[1px] border-black"
-          >
-            Cancel
-          </button>
-        )}
         <button
-          className={`mt-2 text-white cursor-pointer ${
-            mode === "create"
-              ? "bg-[#7695EC] hover:bg-[#637bbd]"
-              : " bg-green-500 hover:bg-green-700"
-          } `}
+          onClick={() => onClose(false)}
+          className="mt-2 text-black cursor-pointer border-[1px] border-black"
+        >
+          Cancel
+        </button>
+
+        <button
+          className="mt-2 text-white cursor-pointer bg-green-500 hover:bg-green-700"
           type="submit"
         >
-          {mode === "create"
-            ? isSubmitting
-              ? "Creating..."
-              : "Create"
-            : isSubmitting
-            ? "Saving..."
-            : "Save"}
+          {isSubmitting ? "Saving..." : "Save"}
         </button>
       </div>
     </form>

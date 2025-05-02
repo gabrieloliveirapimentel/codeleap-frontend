@@ -29,7 +29,7 @@ export function Modal({ post, id, title, onDelete, onClose }: ModalProps) {
   return (
     <div className="fixed inset-0 flex items-center justify-center ">
       <div className="absolute inset-0 bg-[#DDDDDD] opacity-80"></div>
-      <div className="relative bg-white p-6 rounded-lg shadow-md w-full max-w-[600px]">
+      <div className="relative bg-white p-6 rounded-2xl shadow-md w-full max-w-[600px] border-[1px] border-[#CCCCCC]">
         <div className="flex justify-between items-center mb-4 ">
           <h1>{title}</h1>
           <button

@@ -1,39 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { Card } from "../components/card";
-import { PostForm } from "../components/form/post-form";
 
-import { getAllPosts } from "../api/fetch";
 import { useLocation } from "react-router";
-
-export interface Post {
-  id: number;
-  username: string;
-  title: string;
-  content: string;
-  created_datetime: string;
-  author_ip: string;
-}
-
-export interface PostFormData {
-  title: string;
-  content: string;
-}
+import { CreatePostForm } from "../components/form/form-create-post";
+import { PostsContext } from "../contexts/types";
 
 export function Main() {
   const location = useLocation();
-  const username = location.state.username;
-  const [posts, setPosts] = useState<Post[]>([]);
-
-  //const date = new Date();
-  //console.log(date.toISOString());
-
-  useEffect(() => {
-    async function fetchPosts() {
-      const response = await getAllPosts();
-      setPosts(response.data.results);
-    }
-    fetchPosts();
-  }, []);
+  const username: string = location.state.username;
+  const { posts } = useContext(PostsContext);
 
   return (
     <div className="grid items-center justify-center">
@@ -47,7 +22,7 @@ export function Main() {
             <h1 className="text-black font-bold text-xl">
               What's on your mind?
             </h1>
-            <PostForm mode="create" user={username} />
+            {username && <CreatePostForm user={username} />}
           </div>
           {posts.map((post) => (
             <Card

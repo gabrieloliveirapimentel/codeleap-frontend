@@ -1,54 +1,53 @@
-# React + TypeScript + Vite
+<h3 align="center">
+  CodeLeap Frontend
+</h3>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project was developed as part of the CodeLeap selection process for a Junior/Intermediate Front-End position. The challenge consisted of replicating the [CodeLeap Network](https://www.figma.com/design/0OQWLQmU14SF2cDhHPJ2sx/CodeLeap-Engineering-Test) prototype to build a simple social network with full CRUD functionality, using CodeLeap's public API endpoints.
 
-Currently, two official plugins are available:
+The project was made using <b>Tailwind CSS</b>, React Router for routing between pages, Redux Toolkit for state persistence, React Hook Form combined with Yup for form management and validation, and Axios for HTTP requests.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+### Technologies 
+The following tools and libraries were used in this project:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- <b>Tailwind CSS</b>: for styling the user interface;
+- <b>React Router</b>: for client-side navigation;
+- <b>Redux Toolkit</b>: for managing and persisting global state;
+- <b>React Hook Form</b> (with Yup): for building and validating forms;
+- <b>TypeScript</b>: to ensure static typing and safer code;
+- <b>Axios</b>: for handling API requests.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+---
+
+### Deploy
+You can view the deployed project by clicking [here](https://codeleap-frontend-seven.vercel.app/).
+
+---
+
+### Getting started
+
+To run this application locally, follow the steps below:
+
+**Clone the repository:**
+
+```bash
+git clone https://github.com/gabrieloliveirapimentel/codeleap-frontend.git
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+**Navigate into the project directory and install the dependencies:**
+```bash
+cd codeleap-frontend
+npm install
 ```
+
+**Start the development server:**
+```bash
+npm run dev
+```
+
+This will install all required packages and start the local development environment at [**http://localhost:3003**](http://localhost:3003).
+
+
+---
+Feel free to open issues or submit pull requests if you have suggestions or improvements!

@@ -3,16 +3,59 @@ import { useState } from "react";
 import { dateToNow } from "../lib/utils";
 import { Post } from "../store/types";
 
-import { PiTrashBold, PiNotePencilBold } from "react-icons/pi";
+import {
+  PiTrashBold,
+  PiNotePencilBold,
+  PiChatCircleTextBold,
+  PiHeartBold,
+  PiHeartFill,
+} from "react-icons/pi";
+import {
+  addComment,
+  deleteComment,
+  getComments,
+  getLikes,
+  toggleLike,
+} from "../api/local-storage";
 
 interface CardProps {
   post: Post;
+  user: string;
   hasPermission: boolean;
 }
 
-export function Card({ post, hasPermission }: CardProps) {
+export function Card({ post, user, hasPermission }: CardProps) {
+  const [likes, setLikes] = useState(getLikes(post.id));
+  const userHasLiked = likes.users.includes(user);
+
+  const [comments, setComments] = useState(getComments(post.id));
+  const [commentsIsOpen, setCommentsIsOpen] = useState(false);
+
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  function handleLikePost() {
+    const updatedLikes = toggleLike(post.id, user);
+
+    setLikes(updatedLikes);
+  }
+
+  function handleCommentPost(text: string) {
+    addComment(post.id, { username: user, text });
+    setComments([...comments, { username: user, text }]);
+  }
+
+  function handleDeleteComment(
+    postId: number,
+    comment: { username: string; text: string }
+  ) {
+    deleteComment(postId, comment);
+    setComments((prevComments) =>
+      prevComments.filter(
+        (c) => c.username !== comment.username || c.text !== comment.text
+      )
+    );
+  }
 
   return (
     <>
@@ -47,6 +90,80 @@ export function Card({ post, hasPermission }: CardProps) {
           </div>
           <p className="text-[18px] mt-2">{post.content}</p>
         </div>
+        <div className="flex justify-between items-center px-8 pb-4">
+          <div className="flex justify-between items-center gap-3">
+            <PiChatCircleTextBold
+              size={26}
+              color="#7695EC"
+              className="hover:cursor-pointer"
+              onClick={() => setCommentsIsOpen(!commentsIsOpen)}
+            />
+            <span className="text-[18px] text-[#777777]">
+              {" "}
+              {comments.length} comments
+            </span>
+          </div>
+          <div className="flex justify-between items-center gap-3">
+            {!userHasLiked ? (
+              <PiHeartBold
+                size={26}
+                color="#7695EC"
+                onClick={() => {
+                  handleLikePost();
+                }}
+                className="hover:cursor-pointer"
+              />
+            ) : (
+              <PiHeartFill
+                size={26}
+                onClick={() => {
+                  handleLikePost();
+                }}
+                className="text-red-400 hover:cursor-pointer"
+              />
+            )}
+            <span className="text-[18px] text-[#777777]">
+              {likes.count} likes
+            </span>
+          </div>
+        </div>
+
+        {commentsIsOpen && (
+          <div>
+            <div className="flex flex-col gap-4 px-8 py-4">
+              {comments.map((comment, index) => (
+                <div key={index} className="flex flex-row justify-between">
+                  <div className="flex flex-row items-center gap-2">
+                    <span className="font-bold text-[18px] text-[#777777]">
+                      {comment.username}
+                    </span>
+                    <p className="text-[18px]">{comment.text}</p>
+                  </div>
+                  {user === comment.username && (
+                    <PiTrashBold
+                      size={16}
+                      onClick={() => handleDeleteComment(post.id, comment)}
+                      className="text-red-400 hover:cursor-pointer"
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="px-8 pb-4">
+              <input
+                type="text"
+                placeholder="Add a comment..."
+                className="border border-[#999999] rounded-lg p-2 w-full"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleCommentPost((e.target as HTMLInputElement).value);
+                    (e.target as HTMLInputElement).value = "";
+                  }
+                }}
+              />
+            </div>
+          </div>
+        )}
       </div>
       {openEditModal && (
         <Modal

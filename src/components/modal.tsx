@@ -5,6 +5,8 @@ import { DeletePostForm } from "./form/form-delete-post";
 
 import { useAppDispatch } from "../store/hooks";
 import { deletePost } from "../store/postsSlice";
+import { removeLocalData } from "../api/local-storage";
+
 import toast from "react-hot-toast";
 
 interface ModalProps {
@@ -26,6 +28,7 @@ export function Modal({ post, id, title, onDelete, onClose }: ModalProps) {
     if (onDelete) {
       try {
         await dispatch(deletePost(id));
+        removeLocalData(id);
         onClose(false);
 
         toast.success("Post deleted successfully");

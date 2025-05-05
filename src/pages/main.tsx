@@ -39,6 +39,7 @@ export function Main() {
                 <Card
                   key={post.id}
                   post={post}
+                  user={username}
                   hasPermission={post.username === username}
                 />
               ))}

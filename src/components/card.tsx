@@ -1,7 +1,8 @@
 import { Modal } from "./modal";
 import { useState } from "react";
 import { dateToNow } from "../lib/utils";
-import { Post } from "../contexts/types";
+import { Post } from "../store/types";
+
 import { PiTrashBold, PiNotePencilBold } from "react-icons/pi";
 
 interface CardProps {

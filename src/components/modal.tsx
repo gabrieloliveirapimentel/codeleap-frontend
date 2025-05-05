@@ -1,8 +1,11 @@
-import { Post, PostsContext } from "../contexts/types";
+import { Post } from "../store/types";
 import { PiXBold } from "react-icons/pi";
 import { EditPostForm } from "./form/form-edit-post";
-import { DeletePostForm } from "./form/form-delete.post";
-import { useContext } from "react";
+import { DeletePostForm } from "./form/form-delete-post";
+
+import { useAppDispatch } from "../store/hooks";
+import { deletePost } from "../store/postsSlice";
+import toast from "react-hot-toast";
 
 interface ModalProps {
   post?: Post;
@@ -13,7 +16,7 @@ interface ModalProps {
 }
 
 export function Modal({ post, id, title, onDelete, onClose }: ModalProps) {
-  const { deletePost } = useContext(PostsContext);
+  const dispatch = useAppDispatch();
   const initialValues = {
     title: post?.title || "",
     content: post?.content || "",
@@ -21,8 +24,14 @@ export function Modal({ post, id, title, onDelete, onClose }: ModalProps) {
 
   async function handleDelete() {
     if (onDelete) {
-      deletePost(id);
-      onClose(false);
+      try {
+        await dispatch(deletePost(id));
+        onClose(false);
+
+        toast.success("Post deleted successfully");
+      } catch {
+        toast.error("Failed to delete post");
+      }
     }
   }
 

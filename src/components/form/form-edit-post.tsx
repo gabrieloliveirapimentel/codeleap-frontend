@@ -1,8 +1,11 @@
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useContext, useEffect } from "react";
-import { PostsContext } from "../../contexts/types";
+import { useEffect } from "react";
+
+import { useAppDispatch } from "../../store/hooks";
+import { fetchPosts, updatePost } from "../../store/postsSlice";
+import toast from "react-hot-toast";
 
 const schema = yup.object({
   title: yup.string().required("Title is required"),
@@ -18,23 +21,30 @@ interface EditPostProps {
 }
 
 export function EditPostForm({ id, initialValues, onClose }: EditPostProps) {
-  const { updatePost } = useContext(PostsContext);
+  const dispatch = useAppDispatch();
 
   const {
     register,
     reset,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
-    mode: "onBlur",
+    mode: "onChange",
   });
 
   async function onSubmit(data: FormData) {
-    updatePost(id, data);
-    reset();
+    try {
+      await dispatch(updatePost({ id, data }));
+      await dispatch(fetchPosts());
 
-    onClose(false);
+      onClose(false);
+      reset();
+
+      toast.success("Post updated successfully");
+    } catch {
+      toast.error("Failed to update post");
+    }
   }
 
   useEffect(() => {
@@ -90,8 +100,9 @@ export function EditPostForm({ id, initialValues, onClose }: EditPostProps) {
         </button>
 
         <button
-          className="mt-2 text-white cursor-pointer bg-green-500 hover:bg-green-700"
+          className="mt-2 text-white disabled:opacity-50 not-disabled:cursor-pointer bg-green-500 hover:bg-green-700"
           type="submit"
+          disabled={!isValid || isSubmitting}
         >
           {isSubmitting ? "Saving..." : "Save"}
         </button>

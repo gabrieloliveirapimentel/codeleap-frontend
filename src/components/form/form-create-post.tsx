@@ -1,8 +1,10 @@
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useContext } from "react";
-import { PostsContext } from "../../contexts/types";
+
+import { useAppDispatch } from "../../store/hooks";
+import { createPost } from "../../store/postsSlice";
+import toast from "react-hot-toast";
 
 const schema = yup.object({
   title: yup.string().required("Title is required"),
@@ -16,21 +18,27 @@ interface CreatePostProps {
 }
 
 export function CreatePostForm({ user }: CreatePostProps) {
-  const { createPost } = useContext(PostsContext);
+  const dispatch = useAppDispatch();
 
   const {
     register,
     reset,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
-    mode: "onBlur",
+    mode: "onChange",
   });
 
   async function onSubmit(data: FormData) {
-    createPost(user, data);
-    reset();
+    try {
+      dispatch(createPost({ username: user, data }));
+      reset();
+
+      toast.success("Post created successfully");
+    } catch {
+      toast.error("Failed to create post");
+    }
   }
 
   return (
@@ -75,8 +83,9 @@ export function CreatePostForm({ user }: CreatePostProps) {
       </div>
       <div className="flex justify-end">
         <button
-          className="mt-2 text-white cursor-pointer bg-[#7695EC] hover:bg-[#637bbd]"
+          className="mt-2 text-white bg-[#7695EC] hover:bg-[#637bbd] disabled:opacity-50 not-disabled:cursor-pointer"
           type="submit"
+          disabled={!isValid || isSubmitting}
         >
           {isSubmitting ? "Creating..." : "Create"}
         </button>

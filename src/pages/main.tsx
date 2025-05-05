@@ -1,14 +1,23 @@
-import { useContext } from "react";
+import { useEffect } from "react";
 import { Card } from "../components/card";
 
 import { useLocation } from "react-router";
 import { CreatePostForm } from "../components/form/form-create-post";
-import { PostsContext } from "../contexts/types";
+
+import { RootState } from "../store";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../store/hooks";
+import { fetchPosts } from "../store/postsSlice";
 
 export function Main() {
   const location = useLocation();
   const username: string = location.state.username;
-  const { posts } = useContext(PostsContext);
+  const { posts } = useSelector((state: RootState) => state.posts);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, [dispatch]);
 
   return (
     <div className="grid items-center justify-center">

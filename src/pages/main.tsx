@@ -34,7 +34,7 @@ export function Main() {
             {username && <CreatePostForm user={username} />}
           </div>
           {posts.length > 0 ? (
-            <div className="grid gap-8 max-w-[800px]">
+            <div className="grid gap-8 min-md:max-w-[800px] max-md:mx-2">
               {posts.map((post) => (
                 <Card
                   key={post.id}
@@ -44,7 +44,7 @@ export function Main() {
               ))}
             </div>
           ) : (
-            <div className="flex min-w-[800px]">
+            <div className="flex min-md:min-w-[800px] max-md:mx-2">
               <span>No posts found</span>
             </div>
           )}

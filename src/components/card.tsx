@@ -37,7 +37,7 @@ export function Card({ post, hasPermission }: CardProps) {
           )}
         </div>
         <div className="px-8 py-6 grid">
-          <div className="flex justify-between py-3">
+          <div className="flex max-sm:flex-col justify-between py-3">
             <span className="font-bold text-[18px] text-[#777777]">
               {post.username}
             </span>

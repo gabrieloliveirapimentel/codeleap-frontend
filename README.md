@@ -25,6 +25,11 @@ You can view the deployed project by clicking [here](https://codeleap-frontend-s
 
 ---
 
+### New features
+You can view the new optional features in the deployed project by clicking [here](https://codeleap-frontend-seven-features.vercel.app) or accessing the branch ```feature```.
+
+---
+
 ### Getting started
 
 To run this application locally, follow the steps below:

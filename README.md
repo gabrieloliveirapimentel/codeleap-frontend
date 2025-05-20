@@ -1,8 +1,8 @@
 <h3 align="center">
-  CodeLeap Frontend
+  CodeLeap Network
 </h3>
 
-This project was developed as part of the CodeLeap selection process for a Junior/Intermediate Front-End position. The challenge consisted of replicating the [CodeLeap Network](https://www.figma.com/design/0OQWLQmU14SF2cDhHPJ2sx/CodeLeap-Engineering-Test) prototype to build a simple social network with full CRUD functionality, using CodeLeap's public API endpoints.
+This challenge consisted of replicating the [CodeLeap Network](https://www.figma.com/design/0OQWLQmU14SF2cDhHPJ2sx/CodeLeap-Engineering-Test) prototype to build a simple social network with full CRUD functionality, using CodeLeap's public API endpoints.
 
 The project was made using <b>Tailwind CSS</b>, React Router for routing between pages, Redux Toolkit for state persistence, React Hook Form combined with Yup for form management and validation, and Axios for HTTP requests.
 
@@ -25,11 +25,6 @@ You can view the deployed project by clicking [here](https://codeleap-frontend-s
 
 ---
 
-### New features
-You can view the new optional features in the deployed project by clicking [here](https://codeleap-frontend-seven-features.vercel.app) or accessing the branch ```feature```.
-
----
-
 ### Getting started
 
 To run this application locally, follow the steps below:
@@ -37,12 +32,12 @@ To run this application locally, follow the steps below:
 **Clone the repository:**
 
 ```bash
-git clone https://github.com/gabrieloliveirapimentel/codeleap-frontend.git
+git clone https://github.com/gabrieloliveirapimentel/codeleap-network.git
 ```
 
 **Navigate into the project directory and install the dependencies:**
 ```bash
-cd codeleap-frontend
+cd codeleap-network
 npm install
 ```
 
